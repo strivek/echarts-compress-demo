@@ -10,9 +10,9 @@ require(
     ],
     function (ec, $) {
 
-        function chartlogic(ec,$){
+        function chartlogic(ec, $) {
 
-            var myChart = ec.init(document.getElementById("mychart1"));
+            var chart1 = ec.init(document.getElementById("mychart1"));
             //Start
             initMethod();
 
@@ -22,7 +22,14 @@ require(
                 var sql = "json/page1.js";
 
                 //调用渲染方法
-                renderChart(sql);
+                renderChart(sql, chart1, test);
+            }
+            //data  数据
+            //chartObeject 图表对象
+            function test(data, chartObject) {
+                var chartData = eval(data);
+                chartObject.setTheme("dark");
+                chartObject.setOption(chartData);
             }
 
             //交互事件
@@ -33,7 +40,7 @@ require(
             }
 
             //渲染表格
-            function renderChart(sql, successMethod/*可选*/, failMethod/*可选*/) {
+            function renderChart(sql, _chart, successMethod/*可选*/, failMethod/*可选*/) {
                 var request = $.ajax({
                         url: sql,
                         type: "get",
@@ -42,23 +49,28 @@ require(
                     success = successMethod || _success,
                     fail = failMethod || _fail;
 
-                request.done(success);
-                request.fail(fail);
+                request.done(function (data) {
+                    success(data, _chart);
+                });
+                request.fail(function (data) {
+                    fail(data, _chart);
+                });
                 //默认成功方法
-                function _success(data) {
+                function _success(data, chartObject) {
+                    alert(2);
                     var chartData = eval(data);
-                    myChart.setTheme("dark");
-                    myChart.setOption(chartData);
+                    chartObject.setTheme("dark");
+                    chartObject.setOption(chartData);
                 }
 
                 //默认失败
-                function _fail(data) {
+                function _fail(data, myChart) {
                     alert('系统小哥正在开小差，请重新登录');
                 }
             }
 
         }
 
-     return chartlogic(ec,$);
+        return chartlogic(ec, $);
     }
 );
