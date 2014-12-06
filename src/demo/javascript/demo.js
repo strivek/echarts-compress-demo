@@ -10,7 +10,7 @@ require(
     ],
     function (ec, $) {
 
-        function chartlogic(ec,$){
+        function chartlogic(ec, $) {
 
             var myChart = ec.init(document.getElementById("mychart1"));
             //Start
@@ -22,7 +22,7 @@ require(
                 var sql = "json/page1.js";
 
                 //调用渲染方法
-                renderChart(sql);
+                renderChart(sql,myChart);
             }
 
             //交互事件
@@ -33,7 +33,7 @@ require(
             }
 
             //渲染表格
-            function renderChart(sql, successMethod/*可选*/, failMethod/*可选*/) {
+            function renderChart(sql, myChart, successMethod/*可选*/, failMethod/*可选*/) {
                 var request = $.ajax({
                         url: sql,
                         type: "get",
@@ -59,6 +59,6 @@ require(
 
         }
 
-     return chartlogic(ec,$);
+        return chartlogic(ec, $);
     }
 );
