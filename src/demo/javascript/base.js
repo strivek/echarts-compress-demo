@@ -6,7 +6,8 @@ define(['jquery'], function ($) {
 
     baseOption.fn = baseOption.prototype;
 
-    baseOption.fn.renderChart = function (sql, myChart, successMethod/*可选成功方法*/, failMethod/*可选失败方法*/) {
+    baseOption.fn.renderChart = function (sql, chartObject,successMethod/*可选成功方法*/, failMethod/*可选失败方法*/) {
+        console.log(sql);
         var request = $.ajax({
                 url: sql,
                 type: "get",
@@ -15,13 +16,18 @@ define(['jquery'], function ($) {
             success = successMethod || _success,
             fail = failMethod || _fail;
 
-        request.done(success);
-        request.fail(fail);
+        request.done(function(data){
+            success(chartObject,data);
+        });
+        request.fail(function(data){
+            fail(chartObject,data);
+        })
+
         //默认成功方法
-        function _success(data) {
+        function _success(chart,data) {
             var chartData = eval(data);
-            myChart.setTheme("dark");
-            myChart.setOption(chartData);
+            chart.setTheme("dark");
+            chart.setOption(chartData);
         }
         //默认失败
         function _fail(data) {

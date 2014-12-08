@@ -15,7 +15,7 @@ require(
             var myChart = ec.init(document.getElementById("mychart1"));
             var sql = "json/page1.js";
 
-            base.renderChart(sql, myChart);
+            base.renderChart(sql,myChart);
 
             //交互事件
             $("select").change(datachange);
