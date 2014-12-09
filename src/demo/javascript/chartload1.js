@@ -6,7 +6,7 @@ require.config({
         echarts: '../dist/source',
         jquery: 'javascript/lib/jquery.min',
         demo: "javascript/",
-        base:'javascript/base'
+        base:'javascript/baseChart'
     }
 });
 var bodyElem = document.getElementsByTagName("body")[0];

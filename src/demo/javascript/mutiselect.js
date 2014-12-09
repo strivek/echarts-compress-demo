@@ -15,52 +15,99 @@ require(
             var myChart = ec.init(document.getElementById("mychart1"));
             var sql = "json/mutiselect.js";
             var series;
+            var config = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: []
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: []
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: []
+            };
 
-            $("html").on("saveData", function (event, chartData) {
-                series = chartData;
-            })
+            init();
 
 
-            function initData(chart, data) {
-                var _data = eval(data)
-                chart.setOption(_data.option);
+            function init() {
+                //var request = getData(sql);
+                var request = base.getdata(sql);
+                request.done(function (chartData) {
+                    series = eval(chartData);
 
-                $("html").trigger("saveData", _data.data);
+                    var defaultList =['北京','上海','深圳'];
+                    $(defaultList).each(function(index,elem){
+                        base.lineAddSingleData(series,elem,myChart,config);
+                    });
+                });
+
+                request.fail(function (data) {
+                    alert("数据小哥正在维修，请稍后访问");
+                })
+
+                function addAllData(data) {
+                    var legendList = data.name,
+                        xAxisList = data.xlist,
+                        seriesList = [];
+
+                    for (var i = 0, lens = data.name.length; i < lens; i++) {
+                        seriesList.push(template(data.name[i], data.data[i]));
+                    }
+                    function template(name, data) {
+                        var obj = {
+                            name: '',
+                            type: 'line',
+                            data: []
+                        };
+                        obj.name = name;
+                        obj.data = data;
+                        return obj;
+                    }
+                    config.legend.data = legendList;
+                    config.series = seriesList;
+                    config.xAxis[0].data = xAxisList;
+                    myChart.setTheme("default");
+                    myChart.setOption(config, true);
+                }
+
+                eventBind();
             }
 
-            base.renderChart(sql, myChart, initData);
+            function eventBind() {
+                //交互事件
+                $(".m-filter-gf input").change(function () {
+                    // console.log($(this).val()+$(this).is(":checked"));
+                    var status = $(this).is(":checked"),
+                        selected = $(this).val();
 
-            //交互事件
-            $(".m-filter-gf input").change(function () {
-                // console.log($(this).val()+$(this).is(":checked"));
-                var status = $(this).is(":checked"),
-                    selected = $(this).val(),
-                    template = {
-                    name: '城市3',
-                    type: 'line',
-                    stack: '总量',
-                    data: [220, 532, 1001, 134, 90, 230, 210]
-                };
-                template.name =selected;
-
-                status ? addData(template) : removeData(template);
-            });
-            //交互方法
-            function addData(dataKey) {
-                var option = myChart.getOption();
-                option.series.push(dataKey);
-                option.legend.data.push(dataKey.name);
-                myChart.setOption(option);
-
-
-            }
-
-            function removeData(dataKey) {
-                //搜索获取的数据
-                //移除
+                    status ? base.lineAddSingleData(series, selected, myChart) : base.lineRemoveSingleData(selected, myChart);
+                });
             }
         }
 
         return chartlogic(ec, $);
     }
-);
+)
+;
