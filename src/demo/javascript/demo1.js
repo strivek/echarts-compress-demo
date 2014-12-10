@@ -1,6 +1,3 @@
-/**
- * Created by gaofei on 14/12/5.
- */
 require(
     [
         'echarts',
@@ -14,10 +11,11 @@ require(
         function chartlogic(ec, $) {
             //用变量myChart存储图表
             var myChart = ec.init(document.getElementById("mychart1"));
-            var sql = "json/mutiselect.js";
+            var sql = "json/demo1.js";
             //数据 series
             var series;
             var defaultList = ['北京', '上海', '广州'];
+            var defaultmale = "男性";
             //配置
             var config = {
                 //提示框
@@ -57,23 +55,31 @@ require(
                 series: []
             };
             //执行初始化
-
             var request = base.getData(sql);
 
             eventBind();
 
-
             request.done(function (chartData) {
                 series = eval(chartData);
-                addMutiData(series,defaultList,myChart,config)
+                var data = series.data[defaultmale];
+
+                var obj = {
+                    name: series.name,
+                    data: series.data[defaultmale],
+                    xlist: series.xlist
+                }
+                $(defaultList).each(function (index, elem) {
+                    alert(config.legend.data.length);
+                    base.lineAddSingleData(obj, elem, myChart,config);
+                });
             });
-            request.fail(function(){
+            request.fail(function () {
                 alert("程序小哥正在加紧修复中");
             });
 
-            function addMutiData(totallist,addList,chart,option) {
+            function addMutiData(totallist, addList, chart, option) {
                 $(addList).each(function (index, elem) {
-                    base.lineAddSingleData(series, elem, myChart, config);
+                    base.lineAddSingleData(totallist, elem, chart, option);
                 });
             }
 
@@ -84,9 +90,31 @@ require(
                     // console.log($(this).val()+$(this).is(":checked"));
                     var status = $(this).is(":checked"),
                         selected = $(this).val();
+
+                    var obj = {
+                        name: series.name,
+                        data: series.data[defaultmale],
+                        xlist: series.xlist
+                    }
                     //如果这个input是被选择的调用lineAddSingleData(series, selected, myChart)，否则调用base.lineRemoveSingleData(selected, myChart);
-                    status ? base.lineAddSingleData(series, selected, myChart) : base.lineRemoveSingleData(selected, myChart);
+                    status ? base.lineAddSingleData(obj, selected, myChart) : base.lineRemoveSingleData(selected, myChart);
                 });
+
+                $("#year").change(function(){
+                    var value = $(this).val()
+                    var obj = {
+                        name: series.name,
+                        data: series.data[value],
+                        xlist: series.xlist
+                    };
+
+                    config.legend.data = [];
+                    config.series = [];
+                    $(defaultList).each(function (index, elem) {
+                        base.lineAddSingleData(obj, elem, myChart,config);
+                    });
+                })
+
             }
         }
 

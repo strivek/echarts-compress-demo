@@ -9,7 +9,7 @@ define(['jquery'], function ($) {
     
     baseOption.fn = baseOption.prototype;
 
-    baseOption.fn.getdata = function (sql) {
+    baseOption.fn.getData = function (sql) {
         var request = $.ajax({
             url: sql,
             type: "get",
@@ -45,9 +45,9 @@ define(['jquery'], function ($) {
 
         option.series.push(newdata);
         option.legend.data.push(newdata.name);
+
         chartOption.setOption(option,true);
         chartOption.setTheme("default");
-
 
         function template(name, data) {
             var obj = {
@@ -60,6 +60,7 @@ define(['jquery'], function ($) {
             return obj;
         }
     }
+
     baseOption.fn.lineRemoveSingleData = function (selectedData, chartOption) {
         var option = chartOption.getOption();
         for (var i = 0, lens = option.series.length; i < lens; i++) {
@@ -71,6 +72,7 @@ define(['jquery'], function ($) {
             }
         }
     }
+
     baseOption.fn.addAllData = function (data) {
         var legendList = data.name,
             xAxisList = data.xlist,
@@ -96,6 +98,7 @@ define(['jquery'], function ($) {
         myChart.setTheme("default");
         myChart.setOption(config, true);
     }
+
     return new baseOption();
 
 })
