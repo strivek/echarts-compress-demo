@@ -47,7 +47,7 @@ require(
                     ],
                     series: []
                 },
-                defaultList = ['北京', '上海', '深圳'];
+                defaultList = ['北京', '上海', '广州'];
             init();
 
 
@@ -63,7 +63,7 @@ require(
                     });
                 });
 
-                request.fail(function (data) {sorr
+                request.fail(function (data) {
                     alert("数据小哥正在维修，请稍后访问");
                 })
                 eventBind();

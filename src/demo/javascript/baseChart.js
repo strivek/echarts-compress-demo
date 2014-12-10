@@ -45,8 +45,9 @@ define(['jquery'], function ($) {
 
         option.series.push(newdata);
         option.legend.data.push(newdata.name);
+        chartOption.setOption(option,true);
         chartOption.setTheme("default");
-        chartOption.setOption(option);
+
 
         function template(name, data) {
             var obj = {
@@ -64,9 +65,8 @@ define(['jquery'], function ($) {
         for (var i = 0, lens = option.series.length; i < lens; i++) {
 
             if (option.legend.data[i] == selectedData) {
-
-                option.legend.data.splice(i, i + 1);
-                option.series.splice(i, i);
+                option.legend.data.splice(i, 1);
+                option.series.splice(i, 1);
                 chartOption.setOption(option, true);
             }
         }
