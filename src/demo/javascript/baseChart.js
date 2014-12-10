@@ -6,7 +6,7 @@ define(['jquery'], function ($) {
     function baseOption(options) {
 
     }
-
+    
     baseOption.fn = baseOption.prototype;
 
     baseOption.fn.getdata = function (sql) {

@@ -80,7 +80,6 @@ require(
                 });
             }
         }
-
         return chartlogic(ec, $);
     }
 )

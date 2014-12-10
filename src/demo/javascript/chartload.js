@@ -1,11 +1,12 @@
 /**
- * Created by gaofei on 14/12/5.
+ * Created by gaofei on 14/12/6.
  */
 require.config({
     paths: {
         echarts: '../dist/source',
         jquery: 'javascript/lib/jquery.min',
-        demo: "javascript/"
+        demo: "javascript/",
+        base:'javascript/baseChart'
     }
 });
 var bodyElem = document.getElementsByTagName("body")[0];

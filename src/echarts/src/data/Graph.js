@@ -31,7 +31,7 @@ define(function(require) {
         this._nodesMap = {};
         this._edgesMap = {};
     };
-
+  var c = new Graph()
     /**
      * 是否是有向图
      * @return {boolean}
