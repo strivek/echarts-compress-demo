@@ -1,3 +1,6 @@
+/**
+ * Created by gaofei on 14/12/9.
+ */
 define(['jquery'], function ($) {
 
     function baseOption(options) {
@@ -36,7 +39,7 @@ define(['jquery'], function ($) {
         if (defaultOption) {
             option = defaultOption;
             option.xAxis[0].data = seriesData.xlist;
-        }else{
+        } else {
             option = chartOption.getOption();
         }
 
@@ -68,9 +71,31 @@ define(['jquery'], function ($) {
             }
         }
     }
+    baseOption.fn.addAllData = function (data) {
+        var legendList = data.name,
+            xAxisList = data.xlist,
+            seriesList = [];
+
+        for (var i = 0, lens = data.name.length; i < lens; i++) {
+            seriesList.push(template(data.name[i], data.data[i]));
+        }
+        function template(name, data) {
+            var obj = {
+                name: '',
+                type: 'line',
+                data: []
+            };
+            obj.name = name;
+            obj.data = data;
+            return obj;
+        }
+
+        config.legend.data = legendList;
+        config.series = seriesList;
+        config.xAxis[0].data = xAxisList;
+        myChart.setTheme("default");
+        myChart.setOption(config, true);
+    }
     return new baseOption();
 
 })
-/**
- * Created by gaofei on 14/12/9.
- */

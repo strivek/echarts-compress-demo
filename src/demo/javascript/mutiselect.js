@@ -12,42 +12,42 @@ require(
 
         function chartlogic(ec, $) {
 
-            var myChart = ec.init(document.getElementById("mychart1"));
-            var sql = "json/mutiselect.js";
-            var series;
-            var config = {
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data: []
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        mark: {show: true},
-                        dataView: {show: true, readOnly: false},
-                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                        restore: {show: true},
-                        saveAsImage: {show: true}
-                    }
-                },
-                calculable: true,
-                xAxis: [
-                    {
-                        type: 'category',
-                        boundaryGap: false,
+            var myChart = ec.init(document.getElementById("mychart1")),
+                sql = "json/mutiselect.js",
+                series,
+                config = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
                         data: []
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value'
-                    }
-                ],
-                series: []
-            };
-
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: []
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: []
+                },
+                defaultList = ['北京', '上海', '深圳'];
             init();
 
 
@@ -57,48 +57,22 @@ require(
                 request.done(function (chartData) {
                     series = eval(chartData);
 
-                    var defaultList =['北京','上海','深圳'];
-                    $(defaultList).each(function(index,elem){
-                        base.lineAddSingleData(series,elem,myChart,config);
+                    //添加数据
+                    $(defaultList).each(function (index, elem) {
+                        base.lineAddSingleData(series, elem, myChart, config);
                     });
                 });
 
-                request.fail(function (data) {
+                request.fail(function (data) {sorr
                     alert("数据小哥正在维修，请稍后访问");
                 })
-
-                function addAllData(data) {
-                    var legendList = data.name,
-                        xAxisList = data.xlist,
-                        seriesList = [];
-
-                    for (var i = 0, lens = data.name.length; i < lens; i++) {
-                        seriesList.push(template(data.name[i], data.data[i]));
-                    }
-                    function template(name, data) {
-                        var obj = {
-                            name: '',
-                            type: 'line',
-                            data: []
-                        };
-                        obj.name = name;
-                        obj.data = data;
-                        return obj;
-                    }
-                    config.legend.data = legendList;
-                    config.series = seriesList;
-                    config.xAxis[0].data = xAxisList;
-                    myChart.setTheme("default");
-                    myChart.setOption(config, true);
-                }
-
                 eventBind();
             }
 
             function eventBind() {
-                //交互事件
+
                 $(".m-filter-gf input").change(function () {
-                    // console.log($(this).val()+$(this).is(":checked"));
+
                     var status = $(this).is(":checked"),
                         selected = $(this).val();
 
