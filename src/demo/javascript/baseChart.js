@@ -6,7 +6,7 @@ define(['jquery'], function ($) {
     function baseOption(options) {
 
     }
-    
+
     baseOption.fn = baseOption.prototype;
 
     baseOption.fn.getData = function (sql) {
@@ -21,17 +21,9 @@ define(['jquery'], function ($) {
     baseOption.fn.lineAddSingleData = function (seriesData, selectedName, chartOption, defaultOption/*可选*/) {
         var sData;
         var option;
-        for
-        (
-            var i = 0, lens = seriesData.name.length;
-            i < lens;
-            i++
-        ) {
-            if (seriesData.name[i] == selectedName) {
-                sData = seriesData.data[i];
-            }
-        }
-
+        var sName = seriesData.name;
+        var i = sName.indexOf(selectedName);
+        sData = seriesData.data[i];
         var newdata = template(selectedName, sData);
 
         //当初始化添加数据时，引用默认defaultOption
@@ -46,7 +38,7 @@ define(['jquery'], function ($) {
         option.series.push(newdata);
         option.legend.data.push(newdata.name);
 
-        chartOption.setOption(option,true);
+        chartOption.setOption(option, true);
         chartOption.setTheme("default");
 
         function template(name, data) {
@@ -63,14 +55,12 @@ define(['jquery'], function ($) {
 
     baseOption.fn.lineRemoveSingleData = function (selectedData, chartOption) {
         var option = chartOption.getOption();
-        for (var i = 0, lens = option.series.length; i < lens; i++) {
-
-            if (option.legend.data[i] == selectedData) {
-                option.legend.data.splice(i, 1);
-                option.series.splice(i, 1);
-                chartOption.setOption(option, true);
-            }
-        }
+        var sData = option.legend.data;
+        var i = sData.indexOf(selectedData);
+        option.legend.data.splice(i, 1);
+        option.series.splice(i, 1);
+        //生成表格
+        chartOption.setOption(option, true);
     }
 
     baseOption.fn.addAllData = function (data) {

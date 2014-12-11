@@ -68,8 +68,8 @@ require(
                     data: series.data[defaultmale],
                     xlist: series.xlist
                 }
+
                 $(defaultList).each(function (index, elem) {
-                    alert(config.legend.data.length);
                     base.lineAddSingleData(obj, elem, myChart,config);
                 });
             });
